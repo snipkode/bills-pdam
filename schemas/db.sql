@@ -6,19 +6,21 @@ CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY, -- ID unik untuk setiap pengguna
     username VARCHAR(50) UNIQUE NOT NULL, -- Nama pengguna unik
     password VARCHAR(255) NOT NULL, -- Kata sandi pengguna
-    role ENUM('admin', 'officer') NOT NULL, -- Peran pengguna dalam sistem
+    role ENUM('admin', 'officer', 'customer') NOT NULL, -- Peran pengguna dalam sistem, termasuk 'customer'
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- Waktu pembuatan akun
 );
 
 -- Tabel Pelanggan PDAM
 CREATE TABLE customers (
     id INT AUTO_INCREMENT PRIMARY KEY, -- ID unik pelanggan
+    user_id INT NOT NULL, -- Link to users table
     name VARCHAR(100) NOT NULL, -- Nama pelanggan
     email VARCHAR(100) UNIQUE NOT NULL, -- Email pelanggan (harus unik)
     phone VARCHAR(20) NOT NULL, -- Nomor telepon pelanggan
     address TEXT NOT NULL, -- Alamat pelanggan
     customer_number VARCHAR(50) UNIQUE NOT NULL, -- Nomor pelanggan unik
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- Waktu pembuatan data pelanggan
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Waktu pembuatan data pelanggan
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE -- Foreign key to users table
 );
 
 -- Tabel Tagihan PDAM
@@ -69,3 +71,34 @@ CREATE TABLE midtrans_logs (
     raw_response TEXT NOT NULL, -- Data lengkap dari response Midtrans
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- Waktu pencatatan log
 );
+
+-- Dummy data for users
+INSERT INTO users (username, password, role) VALUES
+('admin', '$2b$10$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36Zf4d8b5y3y3y3y3y3y3y3y3', 'admin'), -- password: password
+('officer1', '$2b$10$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36Zf4d8b5y3y3y3y3y3y3y3', 'officer'), -- password: password
+('customer1', '$2b$10$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36Zf4d8b5y3y3y3y3y3y3y3', 'customer'); -- password: password
+
+-- Dummy data for customers
+INSERT INTO customers (user_id, name, email, phone, address, customer_number) VALUES
+(3, 'John Doe', 'john.doe@example.com', '1234567890', '123 Main St', 'CUST001'),
+(3, 'Jane Smith', 'jane.smith@example.com', '0987654321', '456 Elm St', 'CUST002');
+
+-- Dummy data for bills
+INSERT INTO bills (customer_id, month, due_date, amount_due, status) VALUES
+(1, 2023, '2023-12-01', 100.00, 'UNPAID'),
+(2, 2023, '2023-12-01', 150.00, 'UNPAID');
+
+-- Dummy data for payments
+INSERT INTO payments (bill_id, amount_paid, payment_method, status) VALUES
+(1, 100.00, 'CASH', 'SUCCESS'),
+(2, 150.00, 'BANK_TRANSFER', 'SUCCESS');
+
+-- Dummy data for transactions
+INSERT INTO transactions (customer_id, bill_id, amount, status, payment_id) VALUES
+(1, 1, 100.00, 'COMPLETED', 1),
+(2, 2, 150.00, 'COMPLETED', 2);
+
+-- Dummy data for midtrans_logs
+INSERT INTO midtrans_logs (transaction_id, status, raw_response) VALUES
+('TRANS001', 'SUCCESS', '{"order_id":"ORDER001","status":"SUCCESS"}'),
+('TRANS002', 'SUCCESS', '{"order_id":"ORDER002","status":"SUCCESS"}');
