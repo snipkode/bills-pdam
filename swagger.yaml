@@ -1,0 +1,195 @@
+openapi: 3.0.0
+info:
+  title: PDAM Billing System API
+  description: API documentation for the PDAM Billing System
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+paths:
+  /auth/register:
+    post:
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '201':
+          description: User registered successfully
+        '500':
+          description: Database error
+  /auth/login:
+    post:
+      summary: Login a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Login successful
+        '401':
+          description: Invalid credentials
+        '500':
+          description: Database error
+  /customers:
+    get:
+      summary: Get list of customers
+      responses:
+        '200':
+          description: List of customers
+        '500':
+          description: Database error
+    post:
+      summary: Add a new customer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                address:
+                  type: string
+      responses:
+        '201':
+          description: Customer added successfully
+        '500':
+          description: Database error
+  /bills/{customer_id}:
+    get:
+      summary: Get bills for a customer
+      parameters:
+        - in: path
+          name: customer_id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: List of bills
+        '500':
+          description: Database error
+  /bills:
+    post:
+      summary: Add a new bill
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customer_id:
+                  type: integer
+                amount:
+                  type: number
+                meter_reading:
+                  type: string
+      responses:
+        '201':
+          description: Bill added successfully
+        '500':
+          description: Database error
+  /payments:
+    post:
+      summary: Process a payment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: integer
+                payment_type:
+                  type: string
+      responses:
+        '201':
+          description: Payment initiated
+        '400':
+          description: Validation error
+        '500':
+          description: Payment processing failed
+    get:
+      summary: Get payment history
+      responses:
+        '200':
+          description: List of payments
+        '500':
+          description: Failed to fetch payments
+  /payments/status/{transaction_id}:
+    get:
+      summary: Check payment status
+      parameters:
+        - in: path
+          name: transaction_id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: Payment status
+        '404':
+          description: Transaction not found
+        '500':
+          description: Database error
+  /payments/notification:
+    post:
+      summary: Handle Midtrans notification
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                order_id:
+                  type: string
+                transaction_status:
+                  type: string
+                fraud_status:
+                  type: string
+      responses:
+        '200':
+          description: Notification handled successfully
+        '500':
+          description: Database error
+  /midtrans/webhook:
+    post:
+      summary: Midtrans webhook callback
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                order_id:
+                  type: string
+                transaction_status:
+                  type: string
+                gross_amount:
+                  type: number
+      responses:
+        '200':
+          description: Webhook received successfully
+        '500':
+          description: Database error
