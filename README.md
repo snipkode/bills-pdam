@@ -89,7 +89,7 @@ npm start
 ---
 
 ## 📞 Kontak & Dukungan
-Jika ada pertanyaan atau kendala, silakan hubungi developer di **email@domain.com** atau buka issue di GitHub.
+Jika ada pertanyaan atau kendala, silakan hubungi developer di **alamhafidz61@gmail.com** atau buka issue di GitHub.
 
 ---
 
