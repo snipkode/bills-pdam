@@ -15,7 +15,6 @@ const snap = new midtransClient.Snap({
 });
 
 router.use(verifyToken);
-router.use(verifyRole(['customer']));
 
 // Validation rules
 const paymentValidationRules = [

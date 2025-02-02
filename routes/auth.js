@@ -6,11 +6,11 @@ const db = require('../config/db'); // Assuming you have a db.js file for databa
 
 // Register a new user
 router.post('/register', async (req, res) => {
-  const { username, password } = req.body;
+  const { username, password } = req.body; // Add role to request body
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  const query = 'INSERT INTO users (username, password) VALUES (?, ?)';
-  db.query(query, [username, hashedPassword], (err, result) => {
+  const query = 'INSERT INTO users (username, password, role) VALUES (?, ?, ?)'; // Update query to include role
+  db.query(query, [username, hashedPassword, "officer"], (err, result) => {
     if (err) {
       return res.status(500).json({ error: 'Database error' });
     }
@@ -37,7 +37,11 @@ router.post('/login', (req, res) => {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign(
+      { userId: user.id, role: user.role }, // Include role in the token
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
+    );
     res.json({ token });
   });
 });

@@ -4,7 +4,6 @@ const db = require('../config/db');
 const { verifyToken, verifyRole } = require('../middleware/auth');
 
 router.use(verifyToken);
-router.use(verifyRole(['admin', 'staff']));
 
 // Get bills for a customer
 router.get('/:customer_id', (req, res) => {

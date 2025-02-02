@@ -3,8 +3,6 @@ const router = express.Router();
 const db = require('../config/db'); 
 const { verifyToken, verifyRole } = require('../middleware/auth');
 
-router.use(verifyToken);
-router.use(verifyRole(['admin', 'staff']));
 
 // Midtrans webhook callback
 router.post('/webhook', (req, res) => {

@@ -4,12 +4,13 @@ const db = require('../config/db');
 const { verifyToken, verifyRole } = require('../middleware/auth');
 
 router.use(verifyToken);
-router.use(verifyRole(['admin', 'staff']));
+router.use(verifyRole("admin"));
 
 // Get list of customers
 router.get('/', (req, res) => {
   const query = 'SELECT * FROM customers';
   db.query(query, (err, results) => {
+    console.log(err);
     if (err) {
       return res.status(500).json({ error: 'Database error' });
     }

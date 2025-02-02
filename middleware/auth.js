@@ -5,24 +5,29 @@ require('dotenv').config();
 const verifyToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
-  
+
     if (!token) {
       return res.sendStatus(401);
     }
   
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
       if (err) {
+        console.log("VERIFY TOKEN", err);
         return res.sendStatus(403);
       }
       req.user = user;
+
       next();
     });
   };
 
-const verifyRole = (roles) => {
+
+// Middleware to verify role
+const verifyRole = (role) => {
   return (req, res, next) => {
-    if (!roles.includes(req.user.role)) {
-      return res.status(403).json({ error: 'Access denied' });
+    if (req.user.role !== role) {
+     console.log("VERIFY ROLE ", req.user.role);
+      return res.sendStatus(403);
     }
     next();
   };
