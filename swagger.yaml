@@ -49,6 +49,13 @@ paths:
   /customers:
     get:
       summary: Get list of customers
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+          description: Bearer token
       responses:
         '200':
           description: List of customers
@@ -56,6 +63,13 @@ paths:
           description: Database error
     post:
       summary: Add a new customer
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+          description: Bearer token
       requestBody:
         required: true
         content:
@@ -81,6 +95,12 @@ paths:
           schema:
             type: integer
           required: true
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+          description: Bearer token
       responses:
         '200':
           description: List of bills
@@ -89,6 +109,13 @@ paths:
   /bills:
     post:
       summary: Add a new bill
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+          description: Bearer token
       requestBody:
         required: true
         content:
@@ -110,6 +137,13 @@ paths:
   /payments:
     post:
       summary: Process a payment
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+          description: Bearer token
       requestBody:
         required: true
         content:
@@ -130,6 +164,13 @@ paths:
           description: Payment processing failed
     get:
       summary: Get payment history
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+          description: Bearer token
       responses:
         '200':
           description: List of payments
@@ -144,6 +185,12 @@ paths:
           schema:
             type: integer
           required: true
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+          description: Bearer token
       responses:
         '200':
           description: Payment status
@@ -154,6 +201,13 @@ paths:
   /payments/notification:
     post:
       summary: Handle Midtrans notification
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+          description: Bearer token
       requestBody:
         required: true
         content:
@@ -175,6 +229,13 @@ paths:
   /midtrans/webhook:
     post:
       summary: Midtrans webhook callback
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+          description: Bearer token
       requestBody:
         required: true
         content:
