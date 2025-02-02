@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const db = require('../db'); // Assuming you have a db.js file for database connection
+const db = require('../config/db'); // Assuming you have a db.js file for database connection
 
 // Register a new user
 router.post('/register', async (req, res) => {
